@@ -11,12 +11,12 @@ from meraki_tools.meraki_api_utils import MerakiAPIWrapper
 logger = get_logger()
 
 class ProjectUI:
-    def __init__(self, api_utils: MerakiAPIWrapper, project_logic_instance: ProjectLogic,app_scope_name):
+    def __init__(self, api_utils: MerakiAPIWrapper,app_scope_name):
         """
         Initializes the ProjectUI class with API_Utils and ProjectLogic instances.
         """
         self._api_utils = api_utils
-        self._project_logic = project_logic_instance
+        self._project_logic = ProjectLogic(api_utils)
         self.logger = get_logger()
         self.app_scope_name=app_scope_name
         self.logger.info("ProjectUI initialized with API_ with API_Utils and ProjectLogic instances.")
