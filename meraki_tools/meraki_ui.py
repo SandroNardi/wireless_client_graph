@@ -7,10 +7,9 @@ import time
 import io
 import csv
 import os
-import about
 from typing import Dict, List, Any, Optional, Tuple, cast
 from .meraki_api_utils import MerakiAPIWrapper
-from .my_logging import setup_logger, get_logger, log_entries
+from .my_logging import get_logger, log_entries
 
 class PyWebIOApp:
     nav_buttons = [
@@ -19,12 +18,14 @@ class PyWebIOApp:
         {"label": "About", "value": "about"},
     ]
 
-    def __init__(self):
+    def __init__(self,app_scope_name,app_info):
         # Use shared singleton logger; do not reconfigure if already configured
         self.logger = get_logger()
         self.last_displayed_log_index = 0
         self.log_entries_lock = threading.Lock()
         self.meraki_api_utils = MerakiAPIWrapper()
+        self.app_scope_name = app_scope_name
+        self.app_info=app_info
     
     def get_css_style(self) -> str:
         css_file_path = os.path.join(os.path.dirname(__file__), 'style.css')
@@ -40,7 +41,7 @@ class PyWebIOApp:
             self.logger.exception(f"Unexpected error reading styles.css: {e}")
             return ""
 
-    def app_setup(self, app_scope_name: str, required_app_setup_param: Dict[str, Any], app_setup_param: Optional[Dict[str, Any]] = None, enable_caching: Optional[bool] = True) -> Optional[MerakiAPIWrapper]:
+    def app_setup(self, required_app_setup_param: Dict[str, Any], app_setup_param: Optional[Dict[str, Any]] = None, enable_caching: Optional[bool] = True) -> Optional[MerakiAPIWrapper]:
         try:
             caching = enable_caching if enable_caching is not None else False
             initial_api_key = app_setup_param.get("api_key") if app_setup_param else None
@@ -50,7 +51,7 @@ class PyWebIOApp:
                 self.logger.error("Initial application parameter setup failed.")
                 toast("Initial application parameter setup failed. Please check your configuration.", color="error", duration=0)
 
-            with use_scope(app_scope_name, clear=True):
+            with use_scope(self.app_scope_name, clear=True):
                 if required_app_setup_param.get("api_key") and not self.meraki_api_utils.is_api_key_set():
                     self.logger.info("API Key required and not set. Prompting user.")
                     if self.get_valid_api_key(self.meraki_api_utils._api_key) is None:
@@ -108,7 +109,7 @@ class PyWebIOApp:
             return None
 
     def show_about_popup(self):
-        info = about.APP_INFO
+        info = self.app_info
         with popup("About " + info["name"], size='large'):
             put_text(f"{info['name']} (v{info['version']})").style('font-weight:bold; font-size:1.5em;')
             put_text(f"Description: {info['description']}")
@@ -139,10 +140,10 @@ class PyWebIOApp:
         self.logger.warning("Initiating client-side application restart (page reload).")
         run_js("location.reload()")
 
-    def render_header(self, project_name: str):
+    def render_header(self):
         try:
             put_html('<div class="top-gradient-bar"></div>')
-            put_html(f'<div class="top-bar">{project_name}</div>')
+            put_html(f'<div class="top-bar">{self.app_info.get("name")}</div>')
             put_html('<div class="main-layout-container">')
             put_scope('nav')
             put_scope('log_scope')
@@ -151,7 +152,7 @@ class PyWebIOApp:
                     put_scrollable(put_scope('log_display_content'), height=200, keep_bottom=True, scope='rolling_log_container'),
                     put_buttons([{'label': 'Download CSV', 'value': 'download'}], onclick=self.download_logs_as_csv)
                 ], open=False)
-            put_scope('app')
+            put_scope(self.app_scope_name)
             put_html('</div>')
 
             if self.nav_buttons:
@@ -167,7 +168,7 @@ class PyWebIOApp:
                         else:
                             put_text(f"Nav button clicked: {btn_value}")
                     put_buttons(self.nav_buttons, onclick=handle_nav_click)
-            with use_scope('app', clear=True):
+            with use_scope(self.app_scope_name, clear=True):
                 put_text(f"Welcome to {project_name}").style('font-weight:bold; font-size:1.5em; margin-bottom:10px;')
                 put_text("Use the navigation to manage DNS records, profiles, and networks.")
             self.logger.info("Rendered header and initial content.")

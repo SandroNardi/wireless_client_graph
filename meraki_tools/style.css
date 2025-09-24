@@ -73,6 +73,7 @@ body {
     overflow: hidden; /* Prevent main scrollbars */
     color: var(--cisco-text-dark);
     background-color: var(--light-grey); /* Default background for the whole page */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 /* 3. Layout Components */
