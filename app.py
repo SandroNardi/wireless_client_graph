@@ -48,12 +48,8 @@ def app():
             toast("Application setup failed. Please check configurations.", color="error", duration=0)
             return # Use return instead of exit(1) in PyWebIO app context
 
-        # --- New: Instantiate ProjectLogic and ProjectUI ---
-        # 1. Instantiate the ProjectLogic class, injecting the api_utils instance
-        project_logic_instance = ProjectLogic(api_utils)
-
         # 2. Instantiate the ProjectUI class, injecting both api_utils and the project_logic_instance
-        project_ui_instance = ProjectUI(api_utils, project_logic_instance,app_scope_name)
+        project_ui_instance = ProjectUI(api_utils,app_scope_name)
 
         # 3. Start the application by calling the main menu method on the ProjectUI instance
         project_ui_instance.app_main_menu()
