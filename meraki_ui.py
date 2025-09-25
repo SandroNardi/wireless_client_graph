@@ -1,4 +1,4 @@
-# type: ignore
+#type: ignore
 from pywebio.output import put_html, put_buttons, put_scope, use_scope, put_text, put_collapse, put_scrollable, toast, popup
 from pywebio.session import download, run_js
 from pywebio.input import input_group, select, input as pywebio_input
@@ -12,22 +12,28 @@ from .meraki_api_utils import MerakiAPIWrapper
 from .my_logging import get_logger, log_entries
 
 class PyWebIOApp:
+    """
+    PyWebIO-based web application class for managing Meraki API interactions,
+    UI rendering, and logging.
+    """
+
     nav_buttons = [
         {"label": "Current Param", "value": "current_param"},
         {"label": "App Restart", "value": "app_restart"},
         {"label": "About", "value": "about"},
     ]
 
-    def __init__(self,app_scope_name,app_info):
-        # Use shared singleton logger; do not reconfigure if already configured
+    def __init__(self, app_scope_name: str, app_info: Dict[str, Any]) -> None:
+        """Initialize the app with scope name and app metadata."""
         self.logger = get_logger()
-        self.last_displayed_log_index = 0
+        self.last_displayed_log_index: int = 0
         self.log_entries_lock = threading.Lock()
         self.meraki_api_utils = MerakiAPIWrapper()
         self.app_scope_name = app_scope_name
-        self.app_info=app_info
-    
+        self.app_info = app_info
+
     def get_css_style(self) -> str:
+        """Read and return CSS styles from 'style.css' file."""
         css_file_path = os.path.join(os.path.dirname(__file__), 'style.css')
         try:
             with open(css_file_path, 'r', encoding='utf-8') as f:
@@ -41,7 +47,23 @@ class PyWebIOApp:
             self.logger.exception(f"Unexpected error reading styles.css: {e}")
             return ""
 
-    def app_setup(self, required_app_setup_param: Dict[str, Any], app_setup_param: Optional[Dict[str, Any]] = None, enable_caching: Optional[bool] = True) -> Optional[MerakiAPIWrapper]:
+    def app_setup(
+        self,
+        required_app_setup_param: Dict[str, Any],
+        app_setup_param: Optional[Dict[str, Any]] = None,
+        enable_caching: Optional[bool] = True,
+    ) -> Optional[MerakiAPIWrapper]:
+        """
+        Setup application parameters and Meraki API wrapper instance.
+
+        Args:
+            required_app_setup_param: Dict specifying required parameters.
+            app_setup_param: Optional dict of initial parameter values.
+            enable_caching: Optional flag to enable caching.
+
+        Returns:
+            MerakiAPIWrapper instance if setup successful, else None.
+        """
         try:
             caching = enable_caching if enable_caching is not None else False
             initial_api_key = app_setup_param.get("api_key") if app_setup_param else None
@@ -57,14 +79,13 @@ class PyWebIOApp:
                     if self.get_valid_api_key(self.meraki_api_utils._api_key) is None:
                         return None
 
-                organizations = None
-                if required_app_setup_param.get("organization_id"): # Check if organization_id is required
+                organizations: Optional[List[Dict[str, Any]]] = None
+                if required_app_setup_param.get("organization_id"):
                     self.logger.info("Organization ID required. Retrieving organizations.")
                     organizations = self.retrieve_organizations()
                     if organizations is None:
                         return None
 
-                    # Determine the organization ID to check: prioritize from app_setup_param, then current set ID
                     org_id_to_validate = app_setup_param.get("organization_id") if app_setup_param else None
                     if org_id_to_validate is None and self.meraki_api_utils.is_organization_id_set():
                         org_id_to_validate = self.meraki_api_utils.get_organization_id()
@@ -76,14 +97,13 @@ class PyWebIOApp:
                     if selected_org_id is None:
                         return None
 
-                networks = None
-                if required_app_setup_param.get("network_id"): # Check if network_id is required
+                networks: Optional[List[Dict[str, str]]] = None
+                if required_app_setup_param.get("network_id"):
                     self.logger.info("Network ID required. Retrieving networks.")
                     networks = self.retrieve_networks()
                     if networks is None:
                         return None
 
-                    # Determine the network ID to check: prioritize from app_setup_param, then current set ID
                     net_id_to_validate = app_setup_param.get("network_id") if app_setup_param else None
                     if net_id_to_validate is None and self.meraki_api_utils.is_network_id_set():
                         net_id_to_validate = self.meraki_api_utils.get_network_id()
@@ -108,7 +128,8 @@ class PyWebIOApp:
             toast(f"Unexpected error during setup: {e}", color="error", duration=0)
             return None
 
-    def show_about_popup(self):
+    def show_about_popup(self) -> None:
+        """Display an 'About' popup with application information."""
         info = self.app_info
         with popup("About " + info["name"], size='large'):
             put_text(f"{info['name']} (v{info['version']})").style('font-weight:bold; font-size:1.5em;')
@@ -123,7 +144,8 @@ class PyWebIOApp:
             put_text(info['license_text']).style('white-space: pre-wrap; font-family: monospace;')
         self.logger.debug("'About' popup displayed.")
 
-    def show_current_params_popup(self):
+    def show_current_params_popup(self) -> None:
+        """Display a popup showing current application parameters."""
         try:
             params = self.meraki_api_utils.get_current_app_params()
             with popup("Current Parameters"):
@@ -136,11 +158,13 @@ class PyWebIOApp:
         except Exception as e:
             self.logger.exception(f"Error displaying current parameters: {e}")
 
-    def restart_app_client_side(self):
+    def restart_app_client_side(self) -> None:
+        """Trigger a client-side application restart by reloading the page."""
         self.logger.warning("Initiating client-side application restart (page reload).")
         run_js("location.reload()")
 
-    def render_header(self):
+    def render_header(self) -> None:
+        """Render the application header, navigation, and initial content."""
         try:
             put_html('<div class="top-gradient-bar"></div>')
             put_html(f'<div class="top-bar">{self.app_info.get("name")}</div>')
@@ -157,7 +181,7 @@ class PyWebIOApp:
 
             if self.nav_buttons:
                 with use_scope('nav', clear=True):
-                    def handle_nav_click(btn_value):
+                    def handle_nav_click(btn_value: str) -> None:
                         self.logger.info(f"Navigation button clicked: {btn_value}")
                         if btn_value == 'about':
                             self.show_about_popup()
@@ -169,13 +193,14 @@ class PyWebIOApp:
                             put_text(f"Nav button clicked: {btn_value}")
                     put_buttons(self.nav_buttons, onclick=handle_nav_click)
             with use_scope(self.app_scope_name, clear=True):
-                put_text(f"Welcome to {project_name}").style('font-weight:bold; font-size:1.5em; margin-bottom:10px;')
+                put_text(f"Welcome to {self.app_info.get("name")}").style('font-weight:bold; font-size:1.5em; margin-bottom:10px;')
                 put_text("Use the navigation to manage DNS records, profiles, and networks.")
             self.logger.info("Rendered header and initial content.")
         except Exception as e:
             self.logger.exception(f"Unexpected error during header rendering: {e}")
 
-    def download_logs_as_csv(self, btn_value):
+    def download_logs_as_csv(self, btn_value: Any) -> None:
+        """Download the in-memory logs as a CSV file."""
         try:
             output = io.StringIO()
             writer = csv.writer(output)
@@ -190,7 +215,8 @@ class PyWebIOApp:
         except Exception as e:
             self.logger.exception(f"Unexpected error during CSV log download: {e}")
 
-    def update_log_display(self):
+    def update_log_display(self) -> None:
+        """Continuously update the log display area with new log entries."""
         self.logger.info("Starting log display update thread.")
         while True:
             try:
@@ -199,8 +225,9 @@ class PyWebIOApp:
                 if current_log_count > self.last_displayed_log_index:
                     with use_scope('log_display_content', clear=False):
                         for i in range(self.last_displayed_log_index, current_log_count):
-                            # Replace markdown code block with plain text display
-                            put_text(log_entries[i]).style('white-space: pre-wrap; font-family: monospace; background-color: #f0f0f0; padding: 4px; border-radius: 3px; margin-bottom: 2px;')
+                            put_text(log_entries[i]).style(
+                                'white-space: pre-wrap; font-family: monospace; background-color: #f0f0f0; padding: 4px; border-radius: 3px; margin-bottom: 2px;'
+                            )
                     appended = current_log_count - self.last_displayed_log_index
                     self.last_displayed_log_index = current_log_count
                     self.logger.debug(f"Appended {appended} new log entries.")
@@ -212,7 +239,16 @@ class PyWebIOApp:
                 self.logger.exception(f"Unexpected error in update_log_display thread: {e}")
             time.sleep(2)
 
-    def get_valid_api_key(self, initial_api_key=None) -> Optional[str]:
+    def get_valid_api_key(self, initial_api_key: Optional[str] = None) -> Optional[str]:
+        """
+        Prompt user to enter a valid API key until a valid one is set or user cancels.
+
+        Args:
+            initial_api_key: Optional initial API key to validate.
+
+        Returns:
+            Valid API key string or None if user cancels.
+        """
         current_api_key = initial_api_key
         while True:
             if not current_api_key:
@@ -233,6 +269,12 @@ class PyWebIOApp:
                 current_api_key = None
 
     def retrieve_organizations(self) -> Optional[List[Dict[str, Any]]]:
+        """
+        Retrieve list of organizations from Meraki API.
+
+        Returns:
+            List of organizations or None if error occurs.
+        """
         organizations = self.meraki_api_utils.list_organizations()
         if isinstance(organizations, dict) and "error" in organizations:
             toast(f"Error retrieving organizations: {organizations.get('details')}", color="error")
@@ -243,6 +285,12 @@ class PyWebIOApp:
         return organizations
 
     def retrieve_networks(self) -> Optional[List[Dict[str, str]]]:
+        """
+        Retrieve list of networks from Meraki API.
+
+        Returns:
+            List of networks or None if error occurs.
+        """
         networks = self.meraki_api_utils.list_networks()
         if isinstance(networks, dict) and "error" in networks:
             toast(f"Error retrieving networks: {networks.get('details')}", color="error")
@@ -256,6 +304,16 @@ class PyWebIOApp:
         return cast(List[Dict[str, str]], networks)
 
     def select_organization(self, organization_id_param: Optional[str], organizations: List[Dict[str, Any]]) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Select an organization by ID or prompt user to select from list.
+
+        Args:
+            organization_id_param: Optional organization ID to pre-select.
+            organizations: List of available organizations.
+
+        Returns:
+            Tuple of selected organization ID and name, or (None, None) if cancelled.
+        """
         valid_ids = {org["id"] for org in organizations}
         if organization_id_param in valid_ids:
             selected_id = organization_id_param
@@ -288,6 +346,16 @@ class PyWebIOApp:
         return selected_id, selected_name
 
     def select_network(self, network_id_param: Optional[str], networks: List[Dict[str, str]]) -> Tuple[Optional[str], Optional[str]]:
+        """
+        Select a network by ID or prompt user to select from list.
+
+        Args:
+            network_id_param: Optional network ID to pre-select.
+            networks: List of available networks.
+
+        Returns:
+            Tuple of selected network ID and name, or (None, None) if cancelled.
+        """
         valid_ids = {network["id"] for network in networks}
         if network_id_param is not None and network_id_param in valid_ids:
             selected_id = network_id_param

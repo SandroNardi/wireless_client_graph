@@ -1,15 +1,36 @@
-# type: ignore
 import os
 import meraki
 from .my_logging import get_logger
-from typing import Optional, Union, Any, List, Dict, Tuple
+from typing import Optional, Union, Any, List, Dict, Tuple,cast
 
 logger = get_logger()
 
 
+class MerakiAPIWrapper:
+    """
+    Wrapper class for Cisco Meraki Dashboard API with optional caching and logging.
 
-class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
-    def __init__(self, initial_api_key: Optional[str] = None, enable_caching: bool = False):
+    Attributes:
+        _api_key (Optional[str]): API key for Meraki Dashboard.
+        _organization_id (Optional[str]): Selected organization ID.
+        _organization_name (Optional[str]): Selected organization name.
+        _network_id (Optional[str]): Selected network ID.
+        _network_name (Optional[str]): Selected network name.
+        _enable_caching (bool): Flag to enable caching of API responses.
+        _dashboard (Optional[meraki.DashboardAPI]): Meraki Dashboard API client instance.
+        _organizations_cache (Optional[List[Dict[str, Any]]]): Cached organizations data.
+        _networks_cache (Optional[Dict[str, List[Dict[str, Any]]]]): Cached networks data keyed by organization ID.
+        _required_app_setup_param (Dict[str, bool]): Required application setup parameters.
+    """
+
+    def __init__(self, initial_api_key: Optional[str] = None, enable_caching: bool = False) -> None:
+        """
+        Initialize the MerakiAPIWrapper instance.
+
+        Args:
+            initial_api_key (Optional[str]): Initial API key to set.
+            enable_caching (bool): Enable or disable caching of API responses.
+        """
         self._api_key: Optional[str] = None
         self._organization_id: Optional[str] = None
         self._organization_name: Optional[str] = None
@@ -22,8 +43,16 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
         self._required_app_setup_param: Dict[str, bool] = {}
         self.set_api_key(initial_api_key, source="initialization")
 
-    # --- Aggregated setter/getter/is_set for API key, org, network ---
     def _set_attr(self, attr_id: str, attr_name: str, id_value: Optional[str], name_value: Optional[str]) -> None:
+        """
+        Set ID and optional name attributes with logging.
+
+        Args:
+            attr_id (str): Attribute name for ID (e.g., '_organization_id').
+            attr_name (str): Attribute name for name (e.g., '_organization_name').
+            id_value (Optional[str]): Value to set for ID attribute.
+            name_value (Optional[str]): Value to set for name attribute.
+        """
         if id_value:
             setattr(self, attr_id, id_value)
             logger.info(f"{attr_id[1:].replace('_', ' ').title()} set to: {id_value}")
@@ -36,13 +65,38 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
             logger.warning(f"Attempted to set an empty or None {attr_id[1:].replace('_', ' ').title()}.")
 
     def _get_attr(self, attr: str) -> Optional[str]:
+        """
+        Get the value of an attribute.
+
+        Args:
+            attr (str): Attribute name.
+
+        Returns:
+            Optional[str]: Value of the attribute or None.
+        """
         return getattr(self, attr)
 
     def _is_attr_set(self, attr: str) -> bool:
+        """
+        Check if an attribute is set (not None or empty string).
+
+        Args:
+            attr (str): Attribute name.
+
+        Returns:
+            bool: True if set, False otherwise.
+        """
         val = getattr(self, attr)
         return val is not None and val != ""
 
     def set_api_key(self, api_key: Optional[str] = None, source: Optional[str] = None) -> None:
+        """
+        Set the API key from argument or environment variable and initialize Dashboard API client.
+
+        Args:
+            api_key (Optional[str]): API key to set.
+            source (Optional[str]): Source description for logging.
+        """
         if api_key:
             self._api_key = api_key
             logger.info(f"API key set from provided argument. Source: {source or 'direct_call'}")
@@ -62,9 +116,21 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
             self._dashboard = None
 
     def is_api_key_set(self) -> bool:
+        """
+        Check if API key is set.
+
+        Returns:
+            bool: True if API key is set, False otherwise.
+        """
         return self._is_attr_set("_api_key")
 
     def get_headers(self) -> Dict[str, str]:
+        """
+        Get HTTP headers for API requests.
+
+        Returns:
+            Dict[str, str]: Headers including Authorization and content types.
+        """
         return {
             "Authorization": f"Bearer {self._api_key}",
             "Accept": "application/json",
@@ -72,31 +138,86 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
         }
 
     def get_organization_id(self) -> Optional[str]:
+        """
+        Get the current organization ID.
+
+        Returns:
+            Optional[str]: Organization ID or None.
+        """
         return self._get_attr("_organization_id")
 
     def set_organization_id(self, organization_id: str, organization_name: Optional[str] = None) -> None:
+        """
+        Set organization ID and optional name.
+
+        Args:
+            organization_id (str): Organization ID.
+            organization_name (Optional[str]): Organization name.
+        """
         self._set_attr("_organization_id", "_organization_name", organization_id, organization_name)
 
     def get_organization_name(self) -> Optional[str]:
+        """
+        Get the current organization name.
+
+        Returns:
+            Optional[str]: Organization name or None.
+        """
         return self._get_attr("_organization_name")
 
     def is_organization_id_set(self) -> bool:
+        """
+        Check if organization ID is set.
+
+        Returns:
+            bool: True if set, False otherwise.
+        """
         return self._is_attr_set("_organization_id")
 
     def get_network_id(self) -> Optional[str]:
+        """
+        Get the current network ID.
+
+        Returns:
+            Optional[str]: Network ID or None.
+        """
         return self._get_attr("_network_id")
 
     def set_network_id(self, network_id: str, network_name: Optional[str] = None) -> None:
+        """
+        Set network ID and optional name.
+
+        Args:
+            network_id (str): Network ID.
+            network_name (Optional[str]): Network name.
+        """
         self._set_attr("_network_id", "_network_name", network_id, network_name)
 
     def get_network_name(self) -> Optional[str]:
+        """
+        Get the current network name.
+
+        Returns:
+            Optional[str]: Network name or None.
+        """
         return self._get_attr("_network_name")
 
     def is_network_id_set(self) -> bool:
+        """
+        Check if network ID is set.
+
+        Returns:
+            bool: True if set, False otherwise.
+        """
         return self._is_attr_set("_network_id")
 
-    # Dashboard API client management
     def get_dashboard(self) -> Optional[meraki.DashboardAPI]:
+        """
+        Get or initialize the Meraki Dashboard API client.
+
+        Returns:
+            Optional[meraki.DashboardAPI]: Dashboard API client instance or None if API key not set.
+        """
         if self._dashboard is None:
             if not self._api_key:
                 logger.error("Cannot initialize Meraki Dashboard API: API Key is not set.")
@@ -112,8 +233,25 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
             logger.debug("Using existing Meraki Dashboard API instance.")
         return self._dashboard
 
-    # Aggregated internal fetch with caching for organizations and networks
-    def _fetch_data(self, fetch_func, cache_attr: str, cache_key: Optional[str] = None, use_cache: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
+    def _fetch_data(
+        self,
+        fetch_func,
+        cache_attr: str,
+        cache_key: Optional[str] = None,
+        use_cache: bool = False,
+    ) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
+        """
+        Internal method to fetch data with optional caching and error handling.
+
+        Args:
+            fetch_func: Callable to fetch data from API.
+            cache_attr (str): Attribute name for cache storage.
+            cache_key (Optional[str]): Key for cache dictionary if applicable.
+            use_cache (bool): Whether to use cached data if available.
+
+        Returns:
+            Union[List[Dict[str, Any]], Dict[str, Any]]: Fetched data or error dictionary.
+        """
         cache = getattr(self, cache_attr)
         if use_cache and self._enable_caching:
             if cache_key is None and cache is not None:
@@ -159,18 +297,62 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
                     getattr(self, cache_attr)[cache_key] = []
             return {"error": "UnexpectedError", "details": str(e)}
 
+
+
     def _get_organizations(self, use_cache: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
-        return self._fetch_data(lambda: self._dashboard.organizations.getOrganizations(), "_organizations_cache", use_cache=use_cache)
+        """
+        Retrieve organizations list with optional caching.
+
+        Args:
+            use_cache (bool): Use cached data if available.
+
+        Returns:
+            Union[List[Dict[str, Any]], Dict[str, Any]]: Organizations data or error dictionary.
+        """
+        if self._dashboard is None:
+            logger.error("Meraki Dashboard API client is not initialized.")
+            return {"error": "DashboardAPIError", "details": "Meraki Dashboard API client is not initialized."}
+        return self._fetch_data(
+            lambda: cast(meraki.DashboardAPI, self._dashboard).organizations.getOrganizations(),
+            "_organizations_cache",
+            use_cache=use_cache,
+        )
+
 
     def _get_networks(self, organization_id: Optional[str] = None, use_cache: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
+        """
+        Retrieve networks list for an organization with optional caching.
+
+        Args:
+            organization_id (Optional[str]): Organization ID to fetch networks for.
+            use_cache (bool): Use cached data if available.
+
+        Returns:
+            Union[List[Dict[str, Any]], Dict[str, Any]]: Networks data or error dictionary.
+        """
+        if self._dashboard is None:
+            logger.error("Meraki Dashboard API client is not initialized.")
+            return {"error": "DashboardAPIError", "details": "Meraki Dashboard API client is not initialized."}
         org_id = organization_id or self.get_organization_id()
         if not org_id:
             logger.warning("No organization id provided or set.")
             return {"error": "NoOrganizationSelected", "details": "Please select an organization first."}
-        return self._fetch_data(lambda: self._dashboard.organizations.getOrganizationNetworks(org_id), "_networks_cache", cache_key=org_id, use_cache=use_cache)
-
-    # List organizations with formatting
+        return self._fetch_data(
+            lambda: cast(meraki.DashboardAPI, self._dashboard).organizations.getOrganizationNetworks(org_id),
+            "_networks_cache",
+            cache_key=org_id,
+            use_cache=use_cache,
+        )
     def list_organizations(self, use_cache: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
+        """
+        List organizations with formatted output.
+
+        Args:
+            use_cache (bool): Use cached data if available.
+
+        Returns:
+            Union[List[Dict[str, Any]], Dict[str, Any]]: List of organizations or error dictionary.
+        """
         logger.info("Listing organizations.")
         raw_response = self._get_organizations(use_cache=use_cache)
         if isinstance(raw_response, dict) and "error" in raw_response:
@@ -193,8 +375,17 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
         logger.error(f"Unexpected response type from _get_organizations: {type(raw_response)}")
         return {"error": "UnexpectedReturnType", "details": "Internal function returned an unexpected type."}
 
-    # List networks with formatting
     def list_networks(self, organization_id: Optional[str] = None, use_cache: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
+        """
+        List networks for an organization with formatted output.
+
+        Args:
+            organization_id (Optional[str]): Organization ID to list networks for.
+            use_cache (bool): Use cached data if available.
+
+        Returns:
+            Union[List[Dict[str, Any]], Dict[str, Any]]: List of networks or error dictionary.
+        """
         org_id = organization_id or self.get_organization_id()
         logger.info(f"Listing networks for organization id: {org_id}")
         response = self._get_networks(organization_id=organization_id, use_cache=use_cache)
@@ -218,8 +409,16 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
         logger.error(f"Unexpected response type from _get_networks: {type(response)}")
         return []
 
-    # Parameter order validation
     def _check_required_parameter_order(self, required_params: Dict[str, bool]) -> bool:
+        """
+        Validate the logical order of required parameters.
+
+        Args:
+            required_params (Dict[str, bool]): Dictionary of required parameters.
+
+        Returns:
+            bool: True if order is valid, False otherwise.
+        """
         api_key_req = required_params.get("api_key", False)
         org_id_req = required_params.get("organization_id", False)
         net_id_req = required_params.get("network_id", False)
@@ -231,13 +430,23 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
             return False
         return True
 
-    # Setup application parameters
     def setup_application_parameters(
         self,
         required_app_setup_parm: Dict[str, bool],
         app_setup_param: Optional[Dict[str, str]] = None,
-        enable_caching: Optional[bool] = None
+        enable_caching: Optional[bool] = None,
     ) -> bool:
+        """
+        Setup application parameters including API key, organization, and network IDs.
+
+        Args:
+            required_app_setup_parm (Dict[str, bool]): Required parameters with flags.
+            app_setup_param (Optional[Dict[str, str]]): Parameter values to set.
+            enable_caching (Optional[bool]): Enable or disable caching.
+
+        Returns:
+            bool: True if setup successful, False otherwise.
+        """
         logger.info("Setting up application parameters.")
         if enable_caching is not None:
             self._enable_caching = enable_caching
@@ -286,8 +495,13 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
         logger.info("Application parameters setup complete.")
         return True
 
-    # Check current parameters status
     def check_current_parameters_status(self) -> Tuple[bool, List[str]]:
+        """
+        Check if all required parameters are set.
+
+        Returns:
+            Tuple[bool, List[str]]: (True, []) if all set; otherwise (False, list of missing).
+        """
         if not self._required_app_setup_param:
             logger.warning("No required parameters defined. Call setup_application_parameters first.")
             return False, ["No required parameters defined"]
@@ -306,8 +520,13 @@ class MerakiAPIWrapper: # <--- NEW CLASS DEFINITION
         logger.info("All required parameters are set.")
         return True, []
 
-    # Get current application parameters with masked API key
     def get_current_app_params(self) -> Dict[str, Dict[str, str]]:
+        """
+        Get current application parameters with masked API key for display.
+
+        Returns:
+            Dict[str, Dict[str, str]]: Dictionary of parameters with values and labels.
+        """
         params: Dict[str, Dict[str, str]] = {}
         req = self._required_app_setup_param
 
