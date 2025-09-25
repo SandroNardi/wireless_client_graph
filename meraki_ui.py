@@ -1,6 +1,7 @@
 #type: ignore
 from pywebio.output import put_html, put_buttons, put_scope, use_scope, put_text, put_collapse, put_scrollable, toast, popup
 from pywebio.session import download, run_js
+from pywebio.exceptions import SessionNotFoundException
 from pywebio.input import input_group, select, input as pywebio_input
 import threading
 import time
@@ -235,6 +236,10 @@ class PyWebIOApp:
                         "document.querySelector(\"[scope='rolling_log_container'] .pywebio-scrollable-container\").scrollTop = "
                         "document.querySelector(\"[scope='rolling_log_container'] .pywebio-scrollable-container\").scrollHeight;"
                     )
+            except SessionNotFoundException:
+                # Session ended (e.g., browser refresh/navigation). Exit thread cleanly.
+                self.logger.info("Session ended; stopping log display update thread.")
+                break
             except Exception as e:
                 self.logger.exception(f"Unexpected error in update_log_display thread: {e}")
             time.sleep(2)
