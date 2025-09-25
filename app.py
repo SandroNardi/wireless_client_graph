@@ -33,7 +33,7 @@ def app():
     try:
         # Create and register a background thread to update the log display in the UI.
        
-        t = threading.Thread(target=UI.update_log_display)
+        t: threading.Thread = threading.Thread(target=UI.update_log_display, daemon=True)
         register_thread(t)
 
         UI.render_header() # Assuming APP_INFO is now handled within meraki_ui or passed differently
