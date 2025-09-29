@@ -141,8 +141,9 @@ class PyWebIOApp:
             for name, link in info["links"].items():
                 put_html(f'<a href="{link}" target="_blank">{name}</a><br>')
             put_html("<hr>")
-            put_text(f"License: {info['license_name']}")
-            put_text(info['license_text']).style('white-space: pre-wrap; font-family: monospace;')
+            put_collapse(f"License: {info['license_name']}", [
+                put_text(info['license_text']).style('white-space: pre-wrap; font-family: monospace;')
+            ], open=False)
         self.logger.debug("'About' popup displayed.")
 
     def show_current_params_popup(self) -> None:

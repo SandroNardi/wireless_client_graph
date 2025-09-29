@@ -1341,3 +1341,111 @@ NameError: name 'project_name' is not defined
 2025-09-29 14:44:19,160 - INFO - project_ui.py - Collecting Wireless Client History from 2025-09-22T12:44:00+00:00 to 2025-09-29T12:44:00+00:00
 2025-09-29 14:44:19,612 - INFO - project_ui.py - Generating Combined Web-based Client Count Graph...
 2025-09-29 14:48:37,974 - INFO - meraki_ui.py - Navigation button clicked: current_param
+2025-09-29 14:52:58,616 - INFO - project_ui.py - Entering app_main_menu function.
+2025-09-29 14:52:58,619 - INFO - project_ui.py - Displaying main menu for organization: Sandro at Meraki (id: 991866)
+2025-09-29 14:52:59,453 - INFO - project_ui.py - Handling main menu action: wireless_client_graph
+2025-09-29 14:52:59,454 - INFO - meraki_api_utils.py - Listing networks for organization id: 991866
+2025-09-29 14:52:59,455 - INFO - meraki_api_utils.py - Using cached data for key 991866 from _networks_cache.
+2025-09-29 14:53:04,624 - INFO - project_ui.py - Collecting Wireless Client History from 2025-09-10T12:52:00+00:00 to 2025-09-29T12:52:00+00:00
+2025-09-29 14:53:05,183 - INFO - project_ui.py - Generating Combined Web-based Client Count Graph...
+2025-09-29 14:53:24,654 - INFO - project_ui.py - Entering app_main_menu function.
+2025-09-29 14:53:24,655 - INFO - project_ui.py - Displaying main menu for organization: Sandro at Meraki (id: 991866)
+2025-09-29 14:53:25,913 - INFO - project_ui.py - Handling main menu action: wireless_client_graph
+2025-09-29 14:53:25,914 - INFO - meraki_api_utils.py - Listing networks for organization id: 991866
+2025-09-29 14:53:25,915 - INFO - meraki_api_utils.py - Using cached data for key 991866 from _networks_cache.
+2025-09-29 14:53:34,378 - INFO - project_ui.py - Collecting Wireless Client History from 2025-09-28T12:53:00+00:00 to 2025-09-29T12:53:00+00:00
+2025-09-29 14:53:34,754 - INFO - project_ui.py - Generating Combined Web-based Client Count Graph...
+2025-09-29 14:56:14,650 - INFO - meraki_api_utils.py - API key loaded from environment variable (MK_CSM_KEY).
+2025-09-29 14:56:14,651 - INFO - app.py - Application script started.
+2025-09-29 14:57:22,554 - INFO - meraki_api_utils.py - API key loaded from environment variable (MK_CSM_KEY).
+2025-09-29 14:57:22,554 - INFO - app.py - Application script started.
+2025-09-29 14:57:28,406 - INFO - meraki_api_utils.py - API key loaded from environment variable (MK_CSM_KEY).
+2025-09-29 14:57:28,406 - INFO - app.py - Application script started.
+2025-09-29 14:57:50,755 - INFO - meraki_api_utils.py - API key loaded from environment variable (MK_CSM_KEY).
+2025-09-29 14:57:50,755 - INFO - app.py - Application script started.
+2025-09-29 14:57:52,337 - INFO - app.py - Starting PyWebIO application.
+2025-09-29 14:57:52,341 - INFO - meraki_ui.py - Rendered header and initial content.
+2025-09-29 14:57:52,341 - INFO - meraki_ui.py - Starting log display update thread.
+2025-09-29 14:57:52,342 - INFO - meraki_api_utils.py - API key set from provided argument. Source: initialization
+2025-09-29 14:57:52,342 - INFO - meraki_api_utils.py - Setting up application parameters.
+2025-09-29 14:57:52,342 - INFO - meraki_api_utils.py - Caching enabled: True
+2025-09-29 14:57:52,343 - INFO - meraki_api_utils.py - API key set from provided argument. Source: setup_application_parameters
+2025-09-29 14:57:52,344 - INFO - meraki_api_utils.py - Organization Id set to: 991866
+2025-09-29 14:57:52,344 - INFO - meraki_api_utils.py - Application parameters setup complete.
+2025-09-29 14:57:52,345 - INFO - meraki_ui.py - Organization ID required. Retrieving organizations.
+2025-09-29 14:57:52,345 - INFO - meraki_api_utils.py - Listing organizations.
+2025-09-29 14:57:53,069 - INFO - meraki_api_utils.py - Fetched and cached 3 items for _organizations_cache .
+2025-09-29 14:57:53,070 - INFO - meraki_ui.py - Organization ID provided in app_setup_param: 991866.
+2025-09-29 14:57:53,070 - INFO - meraki_api_utils.py - Organization Id set to: 991866
+2025-09-29 14:57:53,070 - INFO - meraki_api_utils.py - Organization Name set to: Sandro at Meraki
+2025-09-29 14:57:53,071 - INFO - meraki_api_utils.py - All required parameters are set.
+2025-09-29 14:57:53,071 - INFO - meraki_ui.py - All required parameters set - returning MerakiAPIWrapper instance.
+2025-09-29 14:57:53,071 - INFO - project_logic.py - ProjectLogic initialized with API_Utils instance.
+2025-09-29 14:57:53,071 - INFO - project_ui.py - ProjectUI initialized with API_ with API_Utils and ProjectLogic instances.
+2025-09-29 14:57:53,071 - INFO - project_ui.py - Entering app_main_menu function.
+2025-09-29 14:57:53,072 - INFO - project_ui.py - Displaying main menu for organization: Sandro at Meraki (id: 991866)
+2025-09-29 14:57:55,147 - INFO - project_ui.py - Handling main menu action: wireless_client_graph
+2025-09-29 14:57:55,147 - INFO - meraki_api_utils.py - Listing networks for organization id: 991866
+2025-09-29 14:57:55,255 - INFO - meraki_api_utils.py - Fetched and cached 5 items for _networks_cache 991866.
+2025-09-29 14:57:56,620 - INFO - project_ui.py - Collecting Wireless Client History from 2025-09-22T12:57:00+00:00 to 2025-09-29T12:57:00+00:00
+2025-09-29 14:57:57,001 - INFO - project_ui.py - Generating Combined Web-based Client Count Graph...
+2025-09-29 14:57:58,647 - INFO - project_ui.py - Starting CSV generation for wireless client data.
+2025-09-29 14:57:58,648 - INFO - project_ui.py - CSV generation completed and download triggered (wireless_client_data.csv).
+2025-09-29 14:58:10,196 - INFO - meraki_ui.py - Navigation button clicked: app_restart
+2025-09-29 14:58:10,197 - WARNING - meraki_ui.py - Initiating client-side application restart (page reload).
+2025-09-29 14:58:10,331 - INFO - app.py - Starting PyWebIO application.
+2025-09-29 14:58:10,335 - INFO - meraki_ui.py - Rendered header and initial content.
+2025-09-29 14:58:10,336 - INFO - meraki_ui.py - Starting log display update thread.
+2025-09-29 14:58:10,337 - INFO - meraki_api_utils.py - API key set from provided argument. Source: initialization
+2025-09-29 14:58:10,338 - INFO - meraki_api_utils.py - Setting up application parameters.
+2025-09-29 14:58:10,339 - INFO - meraki_api_utils.py - Caching enabled: True
+2025-09-29 14:58:10,339 - INFO - meraki_api_utils.py - API key set from provided argument. Source: setup_application_parameters
+2025-09-29 14:58:10,340 - INFO - meraki_api_utils.py - Organization Id set to: 991866
+2025-09-29 14:58:10,340 - INFO - meraki_api_utils.py - Application parameters setup complete.
+2025-09-29 14:58:10,341 - INFO - meraki_ui.py - Organization ID required. Retrieving organizations.
+2025-09-29 14:58:10,341 - INFO - meraki_api_utils.py - Listing organizations.
+2025-09-29 14:58:10,354 - INFO - meraki_ui.py - Session ended; stopping log display update thread.
+2025-09-29 14:58:10,574 - INFO - meraki_api_utils.py - Fetched and cached 3 items for _organizations_cache .
+2025-09-29 14:58:10,574 - INFO - meraki_ui.py - Organization ID provided in app_setup_param: 991866.
+2025-09-29 14:58:10,575 - INFO - meraki_api_utils.py - Organization Id set to: 991866
+2025-09-29 14:58:10,575 - INFO - meraki_api_utils.py - Organization Name set to: Sandro at Meraki
+2025-09-29 14:58:10,576 - INFO - meraki_api_utils.py - All required parameters are set.
+2025-09-29 14:58:10,576 - INFO - meraki_ui.py - All required parameters set - returning MerakiAPIWrapper instance.
+2025-09-29 14:58:10,576 - INFO - project_logic.py - ProjectLogic initialized with API_Utils instance.
+2025-09-29 14:58:10,577 - INFO - project_ui.py - ProjectUI initialized with API_ with API_Utils and ProjectLogic instances.
+2025-09-29 14:58:10,577 - INFO - project_ui.py - Entering app_main_menu function.
+2025-09-29 14:58:10,578 - INFO - project_ui.py - Displaying main menu for organization: Sandro at Meraki (id: 991866)
+2025-09-29 14:58:12,825 - INFO - project_ui.py - Handling main menu action: wireless_client_graph
+2025-09-29 14:58:12,826 - INFO - meraki_api_utils.py - Listing networks for organization id: 991866
+2025-09-29 14:58:12,968 - INFO - meraki_api_utils.py - Fetched and cached 5 items for _networks_cache 991866.
+2025-09-29 14:58:16,509 - INFO - project_ui.py - Collecting Wireless Client History from 2025-09-22T12:58:00+00:00 to 2025-09-29T12:58:00+00:00
+2025-09-29 14:58:16,828 - INFO - project_ui.py - Generating Combined Web-based Client Count Graph...
+2025-09-29 14:58:19,465 - INFO - meraki_ui.py - Navigation button clicked: about
+2025-09-29 15:00:22,705 - INFO - meraki_api_utils.py - API key loaded from environment variable (MK_CSM_KEY).
+2025-09-29 15:00:22,706 - INFO - app.py - Application script started.
+2025-09-29 15:00:29,107 - INFO - meraki_api_utils.py - API key loaded from environment variable (MK_CSM_KEY).
+2025-09-29 15:00:29,108 - INFO - app.py - Application script started.
+2025-09-29 15:00:31,956 - INFO - meraki_api_utils.py - API key loaded from environment variable (MK_CSM_KEY).
+2025-09-29 15:00:31,956 - INFO - app.py - Application script started.
+2025-09-29 15:00:33,845 - INFO - app.py - Starting PyWebIO application.
+2025-09-29 15:00:33,850 - INFO - meraki_ui.py - Rendered header and initial content.
+2025-09-29 15:00:33,851 - INFO - meraki_ui.py - Starting log display update thread.
+2025-09-29 15:00:33,851 - INFO - meraki_api_utils.py - API key set from provided argument. Source: initialization
+2025-09-29 15:00:33,852 - INFO - meraki_api_utils.py - Setting up application parameters.
+2025-09-29 15:00:33,853 - INFO - meraki_api_utils.py - Caching enabled: True
+2025-09-29 15:00:33,853 - INFO - meraki_api_utils.py - API key set from provided argument. Source: setup_application_parameters
+2025-09-29 15:00:33,854 - INFO - meraki_api_utils.py - Organization Id set to: 991866
+2025-09-29 15:00:33,854 - INFO - meraki_api_utils.py - Application parameters setup complete.
+2025-09-29 15:00:33,855 - INFO - meraki_ui.py - Organization ID required. Retrieving organizations.
+2025-09-29 15:00:33,855 - INFO - meraki_api_utils.py - Listing organizations.
+2025-09-29 15:00:34,168 - INFO - meraki_api_utils.py - Fetched and cached 3 items for _organizations_cache .
+2025-09-29 15:00:34,168 - INFO - meraki_ui.py - Organization ID provided in app_setup_param: 991866.
+2025-09-29 15:00:34,168 - INFO - meraki_api_utils.py - Organization Id set to: 991866
+2025-09-29 15:00:34,169 - INFO - meraki_api_utils.py - Organization Name set to: Sandro at Meraki
+2025-09-29 15:00:34,169 - INFO - meraki_api_utils.py - All required parameters are set.
+2025-09-29 15:00:34,169 - INFO - meraki_ui.py - All required parameters set - returning MerakiAPIWrapper instance.
+2025-09-29 15:00:34,170 - INFO - project_logic.py - ProjectLogic initialized with API_Utils instance.
+2025-09-29 15:00:34,170 - INFO - project_ui.py - ProjectUI initialized with API_ with API_Utils and ProjectLogic instances.
+2025-09-29 15:00:34,170 - INFO - project_ui.py - Entering app_main_menu function.
+2025-09-29 15:00:34,171 - INFO - project_ui.py - Displaying main menu for organization: Sandro at Meraki (id: 991866)
+2025-09-29 15:00:34,819 - INFO - meraki_ui.py - Navigation button clicked: about

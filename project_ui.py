@@ -253,33 +253,58 @@ class ProjectUI:
                 import io
                 import csv
                 from pywebio.output import download
+                try:
+                    self.logger.info("Starting CSV generation for wireless client data.")
+                    if not timestamps:
+                        toast("No timestamps available to export.", color="warning")
+                        self.logger.warning("CSV export aborted: timestamps list is empty.")
+                        return
+                    if not graph_data:
+                        toast("No graph data available to export.", color="warning")
+                        self.logger.warning("CSV export aborted: graph_data is empty.")
+                        return
 
-                output = io.StringIO()
-                writer = csv.writer(output)
+                    output = io.StringIO()
+                    writer = csv.writer(output)
 
-                # Write header row
-                header = ["Timestamp"] + [
-                    network_info.get('name', f"Network ID: {network_id}")
-                    for network_id, network_info in graph_data.items()
-                ]
-                writer.writerow(header)
+                    # Header
+                    header = ["Timestamp"] + [
+                        network_info.get('name', f"Network ID: {network_id}")
+                        for network_id, network_info in graph_data.items()
+                    ]
+                    writer.writerow(header)
 
-                # Write data rows
-                for i, timestamp in enumerate(timestamps):
-                    row = [timestamp]
-                    for network_id, network_info in graph_data.items():
-                        client_history = network_info.get('history', [])
-                        count = (
-                            client_history[i]['clientCount']
-                            if i < len(client_history) and 'clientCount' in client_history[i]
-                            else 0
-                        )
-                        row.append(count)
-                    writer.writerow(row)
+                    # Rows
+                    for i, timestamp in enumerate(timestamps):
+                        row = [timestamp]
+                        for network_id, network_info in graph_data.items():
+                            client_history = network_info.get('history', [])
+                            try:
+                                count = (
+                                    client_history[i]['clientCount']
+                                    if i < len(client_history) and 'clientCount' in client_history[i]
+                                    else 0
+                                )
+                            except (IndexError, KeyError, TypeError) as e:
+                                self.logger.warning(f"CSV row build warning for network {network_id} at index {i}: {e}")
+                                count = 0
+                            row.append(count)
+                        writer.writerow(row)
 
-                csv_data = output.getvalue().encode('utf-8')  # Encode string to bytes
-                output.close()
-                download("wireless_client_data.csv", csv_data)
+                    csv_text = output.getvalue()
+                    csv_data = csv_text.encode('utf-8')
+                    output.close()
+
+                    download("wireless_client_data.csv", csv_data)
+                    toast("CSV download started.", color="success")
+                    self.logger.info("CSV generation completed and download triggered (wireless_client_data.csv).")
+                except Exception as e:
+                    self.logger.exception(f"CSV export failed: {e}")
+                    try:
+                        output.close()  # type: ignore[name-defined]
+                    except Exception:
+                        pass
+                    toast(f"Failed to generate CSV: {e}", color="error")
 
             put_buttons(
                 [
