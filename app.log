@@ -1340,3 +1340,4 @@ NameError: name 'project_name' is not defined
 2025-09-29 14:44:18,030 - INFO - meraki_api_utils.py - Fetched and cached 5 items for _networks_cache 991866.
 2025-09-29 14:44:19,160 - INFO - project_ui.py - Collecting Wireless Client History from 2025-09-22T12:44:00+00:00 to 2025-09-29T12:44:00+00:00
 2025-09-29 14:44:19,612 - INFO - project_ui.py - Generating Combined Web-based Client Count Graph...
+2025-09-29 14:48:37,974 - INFO - meraki_ui.py - Navigation button clicked: current_param
