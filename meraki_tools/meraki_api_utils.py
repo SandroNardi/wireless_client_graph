@@ -318,7 +318,6 @@ class MerakiAPIWrapper:
             use_cache=use_cache,
         )
 
-
     def _get_networks(self, organization_id: Optional[str] = None, use_cache: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
         """
         Retrieve networks list for an organization with optional caching.
@@ -343,6 +342,7 @@ class MerakiAPIWrapper:
             cache_key=org_id,
             use_cache=use_cache,
         )
+
     def list_organizations(self, use_cache: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
         """
         List organizations with formatted output.
@@ -375,27 +375,73 @@ class MerakiAPIWrapper:
         logger.error(f"Unexpected response type from _get_organizations: {type(raw_response)}")
         return {"error": "UnexpectedReturnType", "details": "Internal function returned an unexpected type."}
 
-    def list_networks(self, organization_id: Optional[str] = None, use_cache: bool = False) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
+    def list_networks(
+        self,
+        organization_id: Optional[str] = None,
+        use_cache: bool = False,
+        filter_tags: Optional[List[str]] = None,
+        filter_product_type: Optional[List[str]] = None,
+    ) -> Union[List[Dict[str, Any]], Dict[str, Any]]:
         """
-        List networks for an organization with formatted output.
+        List networks for an organization with formatted output,
+        supporting filtering by tags and product types.
 
         Args:
             organization_id (Optional[str]): Organization ID to list networks for.
             use_cache (bool): Use cached data if available.
+            filter_tags (Optional[List[str]]): List of tags to filter networks by.
+                                                A network must have at least one of these tags.
+                                                If an empty list or None, no tag filtering is applied.
+            filter_product_type (Optional[List[str]]): List of product types to filter networks by.
+                                                        A network must support at least one of these product types.
+                                                        If an empty list or None, no product type filtering is applied.
 
         Returns:
             Union[List[Dict[str, Any]], Dict[str, Any]]: List of networks or error dictionary.
         """
         org_id = organization_id or self.get_organization_id()
+        if not org_id:
+            return {"error": "ConfigurationError", "details": "Organization ID is not provided and cannot be determined."}
+
         logger.info(f"Listing networks for organization id: {org_id}")
         response = self._get_networks(organization_id=organization_id, use_cache=use_cache)
+
         if isinstance(response, dict) and "error" in response:
             logger.error(f"Error listing networks: {response.get('details')}")
             return response
+
         if isinstance(response, list):
             if not response:
                 logger.info("No networks found for the selected organization.")
                 return []
+
+            filtered_networks = []
+            for net in response:
+                # Apply tag filtering
+                tags_match = True
+                # If filter_tags is None or an empty list, this 'if' condition is false,
+                # and tags_match remains True, effectively not filtering by tags.
+                if filter_tags:
+                    network_tags = set(net.get("tags", []))
+                    if not any(tag in network_tags for tag in filter_tags):
+                        tags_match = False
+
+                # Apply product type filtering
+                product_type_match = True
+                # If filter_product_type is None or an empty list, this 'if' condition is false,
+                # and product_type_match remains True, effectively not filtering by product types.
+                if filter_product_type:
+                    network_product_types = set(net.get("productTypes", []))
+                    if not any(ptype in network_product_types for ptype in filter_product_type):
+                        product_type_match = False
+
+                if tags_match and product_type_match:
+                    filtered_networks.append(net)
+
+            if not filtered_networks:
+                logger.info("No networks found matching the specified filters.")
+                return []
+
             return [
                 {
                     "id": net.get("id"),
@@ -403,8 +449,9 @@ class MerakiAPIWrapper:
                     "type": net.get("type"),
                     "time zone": net.get("timeZone"),
                     "tags": ", ".join(net.get("tags", [])),
+                    "productTypes": ", ".join(net.get("productTypes", [])),
                 }
-                for net in response
+                for net in filtered_networks
             ]
         logger.error(f"Unexpected response type from _get_networks: {type(response)}")
         return []

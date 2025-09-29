@@ -53,7 +53,7 @@ class ProjectUI:
         self.logger.info(f"Handling main menu action: {action}")
         try:
             if action == "wireless_client_graph":
-                networks = self._api_utils.list_networks(use_cache=True)
+                networks = self._api_utils.list_networks(use_cache=True,filter_product_type=["wireless"])
                 if isinstance(networks, dict) and "error" in networks:
                     toast(f"Error fetching networks: {networks.get('details')}", color="error")
                     return

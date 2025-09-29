@@ -1,8 +1,8 @@
 # app_info.py
 
 APP_INFO = {
-    "name": "---App name", # Placeholder
-    "description": "---App ddescriptionesripyion", # Placeholder 
+    "name": "Wireless Client Count Graph", # Placeholder
+    "description": "Create a graph of the wireless client count for a given time frame for all the networks in the organization", # Placeholder 
     "author": "SandroN",
     "version": "1.0.0",
     "links": {
