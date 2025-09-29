@@ -1449,3 +1449,7 @@ NameError: name 'project_name' is not defined
 2025-09-29 15:00:34,170 - INFO - project_ui.py - Entering app_main_menu function.
 2025-09-29 15:00:34,171 - INFO - project_ui.py - Displaying main menu for organization: Sandro at Meraki (id: 991866)
 2025-09-29 15:00:34,819 - INFO - meraki_ui.py - Navigation button clicked: about
+2025-09-29 15:07:58,375 - INFO - meraki_api_utils.py - API key loaded from environment variable (MK_CSM_KEY).
+2025-09-29 15:07:58,376 - INFO - app.py - Application script started.
+2025-09-29 15:09:35,227 - INFO - meraki_api_utils.py - API key loaded from environment variable (MK_CSM_KEY).
+2025-09-29 15:09:35,228 - INFO - app.py - Application script started.

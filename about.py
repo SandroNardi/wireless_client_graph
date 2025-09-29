@@ -1,13 +1,13 @@
 # app_info.py
 
 APP_INFO = {
-    "name": "Wireless Client Count Graph", # Placeholder
-    "description": "Create a graph of the wireless client count for a given time frame for all the networks in the organization", # Placeholder 
+    "name": "Wireless Client Count Graph",
+    "description": "Create a graph of the wireless client count for a given time frame for all the networks in the organization, allows for CSV export of the data", 
     "author": "SandroN",
     "version": "1.0.0",
     "links": {
-        "GitHub Repository": "https://github.com/SandroN/mx_local_dns_app", # Placeholder
-        "Project Documentation": "https://docs.example.com/mx_local_dns_app" # Placeholder
+        "GitHub Repository": "https://github.com/SandroNardi/wireless_client_graph",
+        "Project Documentation": "https://github.com/SandroNardi/wireless_client_graph"
     },
     "license_name": "MIT License",
     "license_text": """
