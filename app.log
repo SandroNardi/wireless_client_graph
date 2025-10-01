@@ -1667,3 +1667,61 @@ NameError: name 'project_name' is not defined
 2025-10-01 12:22:40,621 - INFO - project_ui.py - Handling main menu action: wireless_client_graph
 2025-10-01 12:22:40,621 - INFO - meraki_api_utils.py - Listing networks for organization id: 991866
 2025-10-01 12:22:40,622 - INFO - meraki_api_utils.py - Using cached data for key 991866 from _networks_cache.
+2025-10-01 12:31:22,378 - ERROR - project_ui.py - An unexpected error occurred in handle_main_menu_action for action 'wireless_client_graph': Can't find current session. Maybe session closed or forget to use `register_thread()`.
+Traceback (most recent call last):
+  File "c:\Users\snardi\OneDrive - Cisco\Documents\GitHub\wireless_client_graph\project_ui.py", line 77, in ui_collect_and_display
+    inputs = input_group("Select Time Frame for Wireless Client History", [
+        input("Start Date (YYYY-MM-DD)", type=DATE, value=default_start.date().strftime("%Y-%m-%d"), name="start_date"),
+    ...<2 lines>...
+        input("End Time (HH:HH)", type=TIME, value=default_end.strftime("%H:%M"), name="end_time"),
+    ])
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\input.py", line 748, in input_group
+    return input_control(spec, preprocess_funcs=preprocess_funcs,
+                         item_valid_funcs=item_valid_funcs,
+                         onchange_funcs=onchange_funcs,
+                         form_valid_funcs=validate)
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\session\__init__.py", line 283, in inner
+    return run_as_function(gen)
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\utils.py", line 296, in run_as_function
+    res = gen.send(res)
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\io_ctrl.py", line 277, in input_control
+    data = yield input_event_handle(item_valid_funcs, form_valid_funcs, preprocess_funcs, onchange_funcs)
+                 ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\session\__init__.py", line 283, in inner
+    return run_as_function(gen)
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\utils.py", line 296, in run_as_function
+    res = gen.send(res)
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\io_ctrl.py", line 339, in input_event_handle
+    event = yield next_client_event()
+                  ~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\session\__init__.py", line 283, in inner
+    return run_as_function(gen)
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\utils.py", line 296, in run_as_function
+    res = gen.send(res)
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\session\__init__.py", line 290, in next_client_event
+    res = yield get_current_session().next_client_event()
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\session\threadbased.py", line 141, in next_client_event
+    raise SessionClosedException
+pywebio.exceptions.SessionClosedException
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "c:\Users\snardi\OneDrive - Cisco\Documents\GitHub\wireless_client_graph\project_ui.py", line 61, in handle_main_menu_action
+    self.ui_collect_and_display(networks)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "c:\Users\snardi\OneDrive - Cisco\Documents\GitHub\wireless_client_graph\project_ui.py", line 71, in ui_collect_and_display
+    with use_scope(self.app_scope_name, clear=True):
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\output.py", line 2157, in __exit__
+    scope = get_current_session().pop_scope()
+            ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\session\__init__.py", line 237, in get_current_session
+    return get_session_implement().get_current_session()
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\snardi\AppData\Local\Programs\Python\Python313\Lib\site-packages\pywebio\session\threadbased.py", line 35, in get_current_session
+    raise SessionNotFoundException("Can't find current session. "
+                                   "Maybe session closed or forget to use `register_thread()`.")
+pywebio.exceptions.SessionNotFoundException: Can't find current session. Maybe session closed or forget to use `register_thread()`.
+2025-10-01 12:31:22,524 - INFO - meraki_ui.py - Session ended; stopping log display update thread.
