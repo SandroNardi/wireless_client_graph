@@ -1,4 +1,4 @@
-# app_info.py
+# about.py
 
 APP_INFO = {
     "name": "Wireless Client Count Graph",

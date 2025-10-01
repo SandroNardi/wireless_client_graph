@@ -1,4 +1,3 @@
-# type: ignore
 # app.py
 from pywebio.output import toast
 from pywebio import start_server, config

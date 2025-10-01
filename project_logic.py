@@ -1,4 +1,3 @@
-# type: ignore
 # project_logic.py
 import os
 import meraki

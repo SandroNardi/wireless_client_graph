@@ -1453,3 +1453,46 @@ NameError: name 'project_name' is not defined
 2025-09-29 15:07:58,376 - INFO - app.py - Application script started.
 2025-09-29 15:09:35,227 - INFO - meraki_api_utils.py - API key loaded from environment variable (MK_CSM_KEY).
 2025-09-29 15:09:35,228 - INFO - app.py - Application script started.
+2025-09-29 15:21:00,862 - INFO - app.py - Starting PyWebIO application.
+2025-09-29 15:21:00,868 - INFO - meraki_ui.py - Rendered header and initial content.
+2025-09-29 15:21:00,869 - INFO - meraki_ui.py - Starting log display update thread.
+2025-09-29 15:21:00,870 - INFO - meraki_api_utils.py - API key set from provided argument. Source: initialization
+2025-09-29 15:21:00,871 - INFO - meraki_api_utils.py - Setting up application parameters.
+2025-09-29 15:21:00,872 - INFO - meraki_api_utils.py - Caching enabled: True
+2025-09-29 15:21:00,873 - INFO - meraki_api_utils.py - API key set from provided argument. Source: setup_application_parameters
+2025-09-29 15:21:00,874 - INFO - meraki_api_utils.py - Organization Id set to: 991866
+2025-09-29 15:21:00,874 - INFO - meraki_api_utils.py - Application parameters setup complete.
+2025-09-29 15:21:00,875 - INFO - meraki_ui.py - Organization ID required. Retrieving organizations.
+2025-09-29 15:21:00,876 - INFO - meraki_api_utils.py - Listing organizations.
+2025-09-29 15:21:01,614 - INFO - meraki_api_utils.py - Fetched and cached 3 items for _organizations_cache .
+2025-09-29 15:21:01,614 - INFO - meraki_ui.py - Organization ID provided in app_setup_param: 991866.
+2025-09-29 15:21:01,614 - INFO - meraki_api_utils.py - Organization Id set to: 991866
+2025-09-29 15:21:01,615 - INFO - meraki_api_utils.py - Organization Name set to: Sandro at Meraki
+2025-09-29 15:21:01,615 - INFO - meraki_api_utils.py - All required parameters are set.
+2025-09-29 15:21:01,615 - INFO - meraki_ui.py - All required parameters set - returning MerakiAPIWrapper instance.
+2025-09-29 15:21:01,615 - INFO - project_logic.py - ProjectLogic initialized with API_Utils instance.
+2025-09-29 15:21:01,616 - INFO - project_ui.py - ProjectUI initialized with API_ with API_Utils and ProjectLogic instances.
+2025-09-29 15:21:01,616 - INFO - project_ui.py - Entering app_main_menu function.
+2025-09-29 15:21:01,616 - INFO - project_ui.py - Displaying main menu for organization: Sandro at Meraki (id: 991866)
+2025-09-29 15:21:02,254 - INFO - app.py - Starting PyWebIO application.
+2025-09-29 15:21:02,256 - INFO - meraki_ui.py - Rendered header and initial content.
+2025-09-29 15:21:02,256 - INFO - meraki_ui.py - Starting log display update thread.
+2025-09-29 15:21:02,257 - INFO - meraki_api_utils.py - API key set from provided argument. Source: initialization
+2025-09-29 15:21:02,257 - INFO - meraki_api_utils.py - Setting up application parameters.
+2025-09-29 15:21:02,257 - INFO - meraki_api_utils.py - Caching enabled: True
+2025-09-29 15:21:02,257 - INFO - meraki_api_utils.py - API key set from provided argument. Source: setup_application_parameters
+2025-09-29 15:21:02,258 - INFO - meraki_api_utils.py - Organization Id set to: 991866
+2025-09-29 15:21:02,258 - INFO - meraki_api_utils.py - Application parameters setup complete.
+2025-09-29 15:21:02,258 - INFO - meraki_ui.py - Organization ID required. Retrieving organizations.
+2025-09-29 15:21:02,258 - INFO - meraki_api_utils.py - Listing organizations.
+2025-09-29 15:21:02,481 - INFO - meraki_api_utils.py - Fetched and cached 3 items for _organizations_cache .
+2025-09-29 15:21:02,482 - INFO - meraki_ui.py - Organization ID provided in app_setup_param: 991866.
+2025-09-29 15:21:02,482 - INFO - meraki_api_utils.py - Organization Id set to: 991866
+2025-09-29 15:21:02,482 - INFO - meraki_api_utils.py - Organization Name set to: Sandro at Meraki
+2025-09-29 15:21:02,483 - INFO - meraki_api_utils.py - All required parameters are set.
+2025-09-29 15:21:02,483 - INFO - meraki_ui.py - All required parameters set - returning MerakiAPIWrapper instance.
+2025-09-29 15:21:02,484 - INFO - project_logic.py - ProjectLogic initialized with API_Utils instance.
+2025-09-29 15:21:02,484 - INFO - project_ui.py - ProjectUI initialized with API_ with API_Utils and ProjectLogic instances.
+2025-09-29 15:21:02,485 - INFO - project_ui.py - Entering app_main_menu function.
+2025-09-29 15:21:02,485 - INFO - project_ui.py - Displaying main menu for organization: Sandro at Meraki (id: 991866)
+2025-09-29 15:21:02,873 - INFO - meraki_ui.py - Session ended; stopping log display update thread.
