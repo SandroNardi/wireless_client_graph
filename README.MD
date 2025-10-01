@@ -71,7 +71,9 @@ By default, PyWebIO starts a local server on port 8080. Open `http://127.0.0.1:8
 1. The main screen shows the selected organization.
 2. Click "Wireless client graph".
 3. Pick the start and end date/time (UTC). The app enforces Meraki’s limits listed above.
+![Date Pick](screenshot/datepick.png "Pick date")
 4. The chart renders one series per wireless network, plus a red "Total Clients" line.
+![Graph output](screenshot/graph.png "Graph ouptut")
 5. Use the buttons to download the displayed data as CSV or go back to the main menu.
 
 CSV includes a header row with `Timestamp` followed by each network name; subsequent rows contain counts aligned by timestamp.
